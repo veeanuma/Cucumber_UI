@@ -29,17 +29,22 @@ public class WebDriverConfig {
     }
 
     public static WebDriver createDriver() {
-        // Force WebDriverManager to download the latest ChromeDriver
-        WebDriverManager.chromedriver().clearDriverCache().setup();
+        try {
+            WebDriverManager.chromedriver().setup();
 
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
-        options.addArguments("--no-sandbox");
-        options.addArguments("--disable-dev-shm-usage");
-        options.addArguments("--disable-gpu");
-        options.addArguments("--dns-prefetch-disable");
+            ChromeOptions options = new ChromeOptions();
+            options.addArguments("--remote-allow-origins=*");
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+            options.addArguments("--disable-gpu");
+            options.addArguments("--dns-prefetch-disable");
+           // options.addArguments("--headless"); // Run in headless mode for better stability
+            options.setExperimentalOption("useAutomationExtension", false);
 
-        return new ChromeDriver(options);
+            return new ChromeDriver(options);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to initialize ChromeDriver: " + e.getMessage(), e);
+        }
     }
 
     public static String getBaseUrl() {
