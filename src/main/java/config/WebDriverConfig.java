@@ -29,14 +29,16 @@ public class WebDriverConfig {
     }
 
     public static WebDriver createDriver() {
-        WebDriverManager.chromedriver().setup();
+        // Force WebDriverManager to download the latest ChromeDriver
+        WebDriverManager.chromedriver().clearDriverCache().setup();
+
         ChromeOptions options = new ChromeOptions();
         options.addArguments("--remote-allow-origins=*");
         options.addArguments("--no-sandbox");
         options.addArguments("--disable-dev-shm-usage");
         options.addArguments("--disable-gpu");
         options.addArguments("--dns-prefetch-disable");
-        options.setCapability("pageLoadStrategy", "normal");
+
         return new ChromeDriver(options);
     }
 
